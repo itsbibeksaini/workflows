@@ -1,0 +1,41 @@
+name: Build .NET application
+
+on:
+  workflow_call:
+    inputs:
+      SOLUTION_FILE:
+        required: true
+        type: string
+      PROJECT_FILE:
+        required: true
+        type: string
+      TEST_PROJECT_FILE:
+        required: true
+        type: string
+      PROJECT_NAME:
+        required: true
+        type: string
+
+jobs:
+  dotnet-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore ${{ inputs.SOLUTION_FILE }}
+    - name: Build
+      run: dotnet build ${{ inputs.PROJECT_FILE }} --no-restore
+    - name: Test
+      run: dotnet test ${{ inputs.TEST_PROJECT_FILE }} --verbosity normal
+    - name: Publish
+      run: dotnet publish ${{ inputs.PROJECT_FILE }} -c Release
+    - name: Upload published artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-artifacts
+        path: |
+          ${{inputs.PROJECT_NAME}}/bin/Release/net6.0/publish
