@@ -41,7 +41,7 @@ jobs:
           name: app-artifacts
           path: ${{inputs.PROJECT_NAME}}/bin/Release/net6.0/publish/    
       - name: Test
-        run: echo ${{inputs.PROJECT_NAME}}/bin/Release/net6.0/publish/
+        run: ls
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Build and release docker image
