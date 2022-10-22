@@ -15,6 +15,11 @@ on:
       IMAGE_NAME:
         required: true
         type: string
+    secrets:
+      DIGITALOCEAN_ACCESS_TOKEN:
+        required: true
+      REGISTRY_NAME:
+        required: true
 
   
 jobs:
