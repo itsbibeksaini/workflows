@@ -1,1 +1,4 @@
 name: Build and push .NET application.
+
+on:
+  workflow_call:
