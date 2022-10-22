@@ -15,8 +15,7 @@ on:
       IMAGE_NAME:
         required: true
         type: string
-env:
-  REGISTRY_NAME: ""
+
   
 jobs:
 
@@ -51,4 +50,4 @@ jobs:
         run: dotnet publish ${{ inputs.PROJECT_FILE }} -c Release
       # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
       - name: Build container image
-        run: docker build -t ${{ env.REGISTRY_NAME }}/${{inputs.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7) .
+        run: docker build -t ${{ secrets.REGISTRY_NAME }}/${{inputs.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7) .
