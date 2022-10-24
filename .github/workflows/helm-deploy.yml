@@ -17,15 +17,15 @@ env:
   CONTAINER_REGISTRY: registry.digitalocean.com/tmsolution-cr
 
 jobs:
-  compute_tag:
-    name: Compute tag.
-    runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      TAG: ${{ steps.build-tag.outputs.tag-output }}      
-    steps:
-      - id: build-tag
-        run: echo "tag-output=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+  # compute_tag:
+  #   name: Compute tag.
+  #   runs-on: ubuntu-latest
+  #   # Map a step output to a job output
+  #   outputs:
+  #     TAG: ${{ steps.build-tag.outputs.tag-output }}      
+  #   steps:
+  #     - id: build-tag
+  #       run: echo "tag-output=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
 
   helm_deploy:
     name: Deploy app using helm.
@@ -51,7 +51,7 @@ jobs:
           --timeout 300s
           --atomic
           --set image.repository=${{env.CONTAINER_REGISTRY}}/${{inputs.IMAGE_NAME}}
-          --set image.tag=${{needs.compute_tag.outputs.TAG}}
+          --set image.tag=$(echo $GITHUB_SHA | head -c7)
           --set imagePullSecrets[0].name=registry-tmsolution-cr
       - name: Verify deployment
         run: kubectl rollout status deployment/${{inputs.IMAGE_NAME}}
