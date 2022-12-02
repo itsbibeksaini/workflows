@@ -61,7 +61,7 @@ jobs:
   
   push:
     if: inputs.PUSH_IMAGE == true
-    uses: itsbibeksaini/github-workflows/.github/workflows/docker-build.yml@main
+    uses: itsbibeksaini/github-workflows/.github/workflows/docker-build-and-push.yml@main
     needs: build
     with:
       IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
