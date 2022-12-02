@@ -25,8 +25,6 @@ on:
       DIGITALOCEAN_ACCESS_TOKEN:
         required: true
         
-env:
-  REGISTRY_NAME: "registry.digitalocean.com/tmsolution-cr"  
 
   
 jobs:
@@ -63,19 +61,12 @@ jobs:
   
   push:
     if: inputs.PUSH_IMAGE == true
-    name: Build and push Docker image
+    uses: itsbibeksaini/github-workflows/.github/workflows/docker-build.yml@main
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
-      - name: Build container image
-        run: docker build -f ${{inputs.DOCKER_FILE}} -t ${{ env.REGISTRY_NAME }}/${{inputs.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7) .
-      # Install doctl.
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push ${{ env.REGISTRY_NAME }}/${{inputs.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7)
+    with:
+      IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
+      DOCKER_FILE: ${{ inputs.DOCKER_FILE }} 
+      PUSH_IMAGE: ${{ inputs.PUSH_IMAGE }}
+    secrets:
+      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      
