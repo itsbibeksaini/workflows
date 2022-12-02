@@ -18,6 +18,9 @@ on:
       DOCKER_FILE:
         required: true
         type: string
+      PUSH_IMAGE:
+        type: boolean
+        default: false
     secrets:
       DIGITALOCEAN_ACCESS_TOKEN:
         required: true
@@ -39,8 +42,8 @@ jobs:
 #       - id: build-tag
 #         run: echo "tag-output=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
         
-  build-and-push:
-    name: Build and push .NET application.
+  build:
+    name: Build .NET application.
     runs-on: ubuntu-latest
 #     needs: compute_tag
     steps:
@@ -57,6 +60,13 @@ jobs:
         run: dotnet test ${{ inputs.TEST_PROJECT_FILE }} --verbosity normal
       - name: Publish
         run: dotnet publish ${{ inputs.PROJECT_FILE }} -c Release
+  
+  push:
+    if: inputs.PUSH_IMAGE == true
+    name: Build and push Docker image
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
       - name: Build container image
         run: docker build -f ${{inputs.DOCKER_FILE}} -t ${{ env.REGISTRY_NAME }}/${{inputs.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7) .
