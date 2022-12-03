@@ -12,33 +12,10 @@ on:
       TEST_PROJECT_FILE:
         required: true
         type: string
-      IMAGE_NAME:
-        required: true
-        type: string
-      DOCKER_FILE:
-        required: true
-        type: string
-      PUSH_IMAGE:
-        type: boolean
-        default: false
-    secrets:
-      DIGITALOCEAN_ACCESS_TOKEN:
-        required: true
         
 
   
 jobs:
-
-#   compute_tag:
-#     name: Compute tag.
-#     runs-on: ubuntu-latest
-#     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
-#     # Map a step output to a job output
-#     outputs:
-#       TAG: ${{ steps.build-tag.outputs.tag-output }}      
-#     steps:
-#       - id: build-tag
-#         run: echo "tag-output=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
         
   build:
     name: Build .NET application.
@@ -58,15 +35,4 @@ jobs:
         run: dotnet test ${{ inputs.TEST_PROJECT_FILE }} --verbosity normal
       - name: Publish
         run: dotnet publish ${{ inputs.PROJECT_FILE }} -c Release
-  
-  push:
-    if: inputs.PUSH_IMAGE == true
-    uses: itsbibeksaini/github-workflows/.github/workflows/docker-build-and-push.yml@main
-    needs: build
-    with:
-      IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
-      DOCKER_FILE: ${{ inputs.DOCKER_FILE }} 
-      PUSH_IMAGE: ${{ inputs.PUSH_IMAGE }}
-    secrets:
-      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       
