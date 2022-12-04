@@ -25,3 +25,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ inputs.GRADLE_TASK }} --no-daemon --parallel
+      - name: Publish test results
+        uses: actions/upload-artifact@v1
+        with:
+          name: Unit test report
+          path: app/build/reports/tests/test/index.html
