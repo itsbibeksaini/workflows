@@ -27,6 +27,8 @@ jobs:
           arguments: ${{ inputs.GRADLE_TASK }} --no-daemon --parallel
           
   publish:
+    if: ${{ always() }}
+    needs: gradle-build
     name: Publish test results
     runs-on: ubuntu-latest
     steps:
