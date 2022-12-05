@@ -26,13 +26,3 @@ jobs:
         with:
           arguments: ${{ inputs.GRADLE_TASK }} --no-daemon --parallel
           
-  publish:
-    if: ${{ always() }}
-    needs: gradle-build
-    name: Publish test results
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/upload-artifact@v1
-        with:
-          name: Unit test report
-          path: build/reports/tests/test/index.html
