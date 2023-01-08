@@ -1,5 +1,8 @@
 name: Build node applications.
 
+on:
+  workflow_call
+
 jobs:
   build:
 
