@@ -9,6 +9,11 @@ on:
       GRADLE_TASK:
         type: string
         default: 'build'
+    secrets:
+      USERNAME:
+        required: true
+      PASSWORD:
+        required: true
 
 jobs:
   gradle-build:
