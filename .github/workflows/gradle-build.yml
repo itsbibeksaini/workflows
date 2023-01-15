@@ -28,6 +28,9 @@ jobs:
           distribution: 'temurin'
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         with:
           arguments: ${{ inputs.GRADLE_TASK }} --no-daemon --parallel
           
