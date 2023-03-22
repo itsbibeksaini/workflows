@@ -11,9 +11,9 @@ on:
         default: 'build'
     secrets:
       USERNAME:
-        required: true
+        required: false
       PASSWORD:
-        required: true
+        required: false
 
 jobs:
   gradle-build:
