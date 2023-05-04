@@ -31,8 +31,8 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         env:
-          USERNAME: ${{ secrets.AZURE_ARTIFACT_USERNAME }}
-          PASSWORD: ${{ secrets.AZURE_ARTIFACT_PASSWORD }}
+          AZURE_ARTIFACT_USERNAME: ${{ secrets.AZURE_ARTIFACT_USERNAME }}
+          AZURE_ARTIFACT_PASSWORD: ${{ secrets.AZURE_ARTIFACT_PASSWORD }}
         with:
           arguments: ${{ inputs.GRADLE_TASK }} --no-daemon --parallel
           
